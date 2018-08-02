@@ -5,14 +5,18 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
-      xmlns:l="using:RepeaterDemo.Models"
+      xmlns:models="using:RepeaterDemo.Models"
       xmlns:controls="using:Microsoft.UI.Xaml.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
 
-        <DataTemplate x:Key="FlexBarTemplate"
-                      x:DataType="l:SampleData">
+        <controls:RecyclePool x:Key="RecyclePool1" />
+        <controls:RecyclePool x:Key="RecyclePool2" />
+        <controls:RecyclePool x:Key="RecyclePool3" />
+
+        <DataTemplate x:Key="FlowBarTemplate"
+                      x:DataType="models:SampleData">
             <Border Background="{ThemeResource SystemAccentColor}"
                     Width="{x:Bind Value}"
                     Height="24"
@@ -23,27 +27,23 @@
             </Border>
         </DataTemplate>
 
-        <controls:RecyclePool x:Key="RecyclePool1" />
-        <controls:RecyclePool x:Key="RecyclePool2" />
-        <controls:RecyclePool x:Key="RecyclePool3" />
-
         <controls:StackLayout x:Name="VerticalStackLayout"
                               Orientation="Vertical"
                               ItemSpacing="8" />
 
-        <controls:FlowLayout x:Name="FlexLayout"
+        <controls:FlowLayout x:Name="FlowLayout"
                              Orientation="Horizontal"
                              MinItemSpacing="8"
                              LineSpacing="8" />
 
-        <controls:GridLayout x:Name="UniformGridLayout"
+        <controls:GridLayout x:Name="GridLayout"
                              MinItemSpacing="8"
                              LineSpacing="8" />
 
         <controls:RecyclingViewGenerator x:Key="HorizontalElementGenerator"
                                          RecyclePool="{StaticResource RecyclePool1}">
             <DataTemplate x:Key="hItem"
-                          x:DataType="l:SampleData">
+                          x:DataType="models:SampleData">
                 <Grid Background="{ThemeResource SystemChromeLowColor}"
                       HorizontalAlignment="Left"
                       Width="{x:Bind Max}">
@@ -59,17 +59,17 @@
             </DataTemplate>
         </controls:RecyclingViewGenerator>
 
-        <controls:RecyclingViewGenerator x:Key="FlexElementGenerator"
+        <controls:RecyclingViewGenerator x:Key="FlowElementGenerator"
                                          RecyclePool="{StaticResource RecyclePool2}">
             <StaticResource x:Key="fItem"
-                            ResourceKey="FlexBarTemplate" />
+                            ResourceKey="FlowBarTemplate" />
         </controls:RecyclingViewGenerator>
 
         <controls:RecyclingViewGenerator x:Key="GridViewGenerator"
                                          RecyclePool="{StaticResource RecyclePool3}"
                                          SelectTemplateKey="GridViewGenerator_SelectTemplateKey">
             <DataTemplate x:Name="EllipseItem"
-                          x:DataType="l:SampleData">
+                          x:DataType="models:SampleData">
                 <Grid>
                     <Ellipse Fill="{ThemeResource SystemChromeLowColor}"
                              Height="{x:Bind MaxSize}"
@@ -87,7 +87,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Name="RectangleItem"
-                          x:DataType="l:SampleData">
+                          x:DataType="models:SampleData">
                 <Grid>
                     <Rectangle Fill="{ThemeResource SystemChromeLowColor}"
                                Height="{x:Bind MaxSize}"
@@ -143,12 +143,12 @@
                          Tag="VerticalStackLayout"
                          IsChecked="True" />
             <RadioButton GroupName="Sample1Layouts"
-                         Content="FlexLayout"
-                         Tag="FlexLayout"
+                         Content="FlowLayout"
+                         Tag="FlowLayout"
                          Click="RadioBtn_Click" />
             <RadioButton GroupName="Sample1Layouts"
-                         Content="UniformGridLayout"
-                         Tag="UniformGridLayout"
+                         Content="GridLayout"
+                         Tag="GridLayout"
                          Click="RadioBtn_Click" />
         </StackPanel>
     </Grid>

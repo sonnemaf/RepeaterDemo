@@ -1,4 +1,5 @@
-﻿using RepeaterDemo.Models;
+﻿using Microsoft.UI.Xaml.Controls;
+using RepeaterDemo.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -94,9 +95,9 @@ namespace RepeaterDemo {
             if (layoutKey.Equals(nameof(this.VerticalStackLayout))) // we used x:Name in the resources which both acts as the x:Key value and creates a member field by the same name
             {
                 elementGeneratorKey = "HorizontalElementGenerator";
-            } else if (layoutKey.Equals(nameof(this.FlexLayout))) {
-                elementGeneratorKey = "FlexElementGenerator";
-            } else if (layoutKey.Equals(nameof(this.UniformGridLayout))) {
+            } else if (layoutKey.Equals(nameof(this.FlowLayout))) {
+                elementGeneratorKey = "FlowElementGenerator";
+            } else if (layoutKey.Equals(nameof(this.GridLayout))) {
                 elementGeneratorKey = "GridViewGenerator";
             }
 
@@ -104,8 +105,8 @@ namespace RepeaterDemo {
             repeater.ViewGenerator = Resources[elementGeneratorKey] as Microsoft.UI.Xaml.Controls.ViewGenerator;
         }
 
-        private void GridViewGenerator_SelectTemplateKey(Microsoft.UI.Xaml.Controls.RecyclingViewGenerator sender, Microsoft.UI.Xaml.Controls.SelectTemplateEventArgs args) {
-            args.TemplateKey = ((SampleData)args.DataContext).Value > 200 ? nameof(this.EllipseItem) : nameof(this.RectangleItem);
-        }
+private void GridViewGenerator_SelectTemplateKey(RecyclingViewGenerator sender, Microsoft.UI.Xaml.Controls.SelectTemplateEventArgs args) {
+    args.TemplateKey = ((SampleData)args.DataContext).Value >= 200 ? nameof(this.EllipseItem) : nameof(this.RectangleItem);
+}
     }
 }
