@@ -1,0 +1,155 @@
+﻿<Page x:Class="RepeaterDemo.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:RepeaterDemo"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      xmlns:l="using:RepeaterDemo.Models"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+
+        <DataTemplate x:Key="FlexBarTemplate"
+                      x:DataType="l:SampleData">
+            <Border Background="{ThemeResource SystemAccentColor}"
+                    Width="{x:Bind Value}"
+                    Height="24"
+                    VerticalAlignment="Top">
+                <TextBlock Text="{x:Bind Value}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+
+        <controls:RecyclePool x:Key="RecyclePool1" />
+        <controls:RecyclePool x:Key="RecyclePool2" />
+        <controls:RecyclePool x:Key="RecyclePool3" />
+
+        <controls:StackLayout x:Name="VerticalStackLayout"
+                              Orientation="Vertical"
+                              ItemSpacing="8" />
+
+        <controls:FlowLayout x:Name="FlexLayout"
+                             Orientation="Horizontal"
+                             MinItemSpacing="8"
+                             LineSpacing="8" />
+
+        <controls:GridLayout x:Name="UniformGridLayout"
+                             MinItemSpacing="8"
+                             LineSpacing="8" />
+
+        <controls:RecyclingViewGenerator x:Key="HorizontalElementGenerator"
+                                         RecyclePool="{StaticResource RecyclePool1}">
+            <DataTemplate x:Key="hItem"
+                          x:DataType="l:SampleData">
+                <Grid Background="{ThemeResource SystemChromeLowColor}"
+                      HorizontalAlignment="Left"
+                      Width="{x:Bind Max}">
+                    <Rectangle Fill="{ThemeResource SystemAccentColor}"
+                               Width="{x:Bind Value}"
+                               Height="24"
+                               HorizontalAlignment="Left" />
+                    <TextBlock Text="{x:Bind Value}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="4,0" />
+                </Grid>
+            </DataTemplate>
+        </controls:RecyclingViewGenerator>
+
+        <controls:RecyclingViewGenerator x:Key="FlexElementGenerator"
+                                         RecyclePool="{StaticResource RecyclePool2}">
+            <StaticResource x:Key="fItem"
+                            ResourceKey="FlexBarTemplate" />
+        </controls:RecyclingViewGenerator>
+
+        <controls:RecyclingViewGenerator x:Key="GridViewGenerator"
+                                         RecyclePool="{StaticResource RecyclePool3}"
+                                         SelectTemplateKey="GridViewGenerator_SelectTemplateKey">
+            <DataTemplate x:Name="EllipseItem"
+                          x:DataType="l:SampleData">
+                <Grid>
+                    <Ellipse Fill="{ThemeResource SystemChromeLowColor}"
+                             Height="{x:Bind MaxSize}"
+                             Width="{x:Bind MaxSize}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center" />
+                    <Ellipse Fill="{ThemeResource SystemAccentColor}"
+                             Height="{x:Bind Size}"
+                             Width="{x:Bind Size}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center" />
+                    <TextBlock Text="{x:Bind Value}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Name="RectangleItem"
+                          x:DataType="l:SampleData">
+                <Grid>
+                    <Rectangle Fill="{ThemeResource SystemChromeLowColor}"
+                               Height="{x:Bind MaxSize}"
+                               Width="{x:Bind MaxSize}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                    <Rectangle Fill="{ThemeResource SystemAccentColor}"
+                               Height="{x:Bind Size}"
+                               Width="{x:Bind Size}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{x:Bind Value}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </controls:RecyclingViewGenerator>
+    </Page.Resources>
+
+    <Grid Padding="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ElementTracker enables Repeater to coordinate with ScrollViewer down-level.  It's not needed
+                 on 17700+ builds. -->
+        <!--<controls:ElementTracker x:Name="elementTracker">-->
+        <ScrollViewer>
+            <controls:Repeater x:Name="repeater"
+                               ItemsSource="{x:Bind SampleDataItems}"
+                               Layout="{StaticResource VerticalStackLayout}"
+                               ViewGenerator="{StaticResource HorizontalElementGenerator}" />
+        </ScrollViewer>
+        <!--</controls:ElementTracker>-->
+
+        <StackPanel Grid.Column="1"
+                    Margin="8,0">
+
+            <Button x:Name="AddBtn"
+                    Content="Add Item"
+                    Click="AddBtn_Click"
+                    MinWidth="150" />
+            <Button x:Name="DeleteBtn"
+                    Content="Remove Item"
+                    Click="DeleteBtn_Click"
+                    MinWidth="150"
+                    Margin="0,8,0,24" />
+
+            <RadioButton GroupName="Sample1Layouts"
+                         Content="StackLayout"
+                         Click="RadioBtn_Click"
+                         Tag="VerticalStackLayout"
+                         IsChecked="True" />
+            <RadioButton GroupName="Sample1Layouts"
+                         Content="FlexLayout"
+                         Tag="FlexLayout"
+                         Click="RadioBtn_Click" />
+            <RadioButton GroupName="Sample1Layouts"
+                         Content="UniformGridLayout"
+                         Tag="UniformGridLayout"
+                         Click="RadioBtn_Click" />
+        </StackPanel>
+    </Grid>
+</Page>
